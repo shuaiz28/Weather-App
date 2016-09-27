@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Index Home Page</title>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script src="WeatherAPP.js"></script>
+	<link rel="stylesheet" type="text/css" href="WeatherAPP.css">
+</head>
+<body ng-app="myApp">
+	<nav class="navbar navbar-inverse "> <!--navbar-fixed-top-->
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">Weather<span class="charA">A</span><span class="charP1">P</span><span class="charP2">P</span></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Home</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Current Weather
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="curByCity">By City Name</a></li>
+							<li><a href="#" id="curByLoc">By Location</a></li>
+							<li><a href="#" id="curByZip">By Zipcode</a></li>
+						</ul>						
+					</li>
+
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Weather Forecast
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="foreByCity">By City Name</a></li>
+							<li><a href="#" id="foreByLoc">By Location</a></li>
+						</ul>						
+					</li>
+				</ul>
+			</div>			
+		</div>
+	</nav>
+	
+	<div class="container-fluid" ng-controller="myController">
+		<h3>Welcome to Weather<span class="charA">A</span><span class="charP1">P</span><span class="charP2">P</span></h3>
+		<hr />
+	
+		<div class="col-md-4">
+			<!-- Check current weather by city name -->
+			<div class="panel panel-info" id="curByCityPanel">
+				<div class="panel-heading">Current Weather</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label>City Name</label>
+							<input type="text" class="form-control" ng-model="cityName" id="cityName" placeholder="Input city name" required pattern="(^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$)"></input>
+						</div>
+						<button class="btn btn-primary" ng-click="checkCurByCity()">Check</button>
+					</form>
+				</div>
+			</div>
+			<!-- Check current weather by lon & lat -->
+			<div class="panel panel-info" id="curByLocPanel">
+				<div class="panel-heading">Current Weather</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label>Longitude</label>
+							<input type="text" class="form-control" ng-model="longitude" placeholder="Input longitude" required></input>
+						</div>
+						<div class="form-group">
+							<label>Latitude</label>
+							<input type="text" class="form-control" ng-model="latitude" placeholder="Input latitude" required></input>
+						</div>
+						<button class="btn btn-primary" ng-click="checkCurByLoc()">Check</button>
+					</form>
+				</div>
+				<label class="alert" id="alertCurByLoc">{{alertCurByLoc}}</label>
+			</div>
+			<!-- Check current weather by zipcode-->
+			<div class="panel panel-info" id="curByZipPanel">
+				<div class="panel-heading">Current Weather</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label>Zipcode(U.S.)</label>
+							<input type="text" class="form-control" ng-model="zipcode" placeholder="Input zipcode" required pattern="(\d{5}([\-]\d{4})?)"></input>
+						</div>
+						<button class="btn btn-primary" ng-click="checkCurByZip()">Check</button>
+					</form>
+				</div>
+				<label class="alert" id="alertCurByZip">{{alertCurByZip}}</label>
+			</div>
+			<!-- Check weather forecast by city name -->
+			<div class="panel panel-info" id="foreByCityPanel">
+				<div class="panel-heading">Weather Forecast</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label>City Name</label>
+							<input type="text" class="form-control" ng-model="foreCityName" id="foreCityName" placeholder="Input city name" required pattern="(^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$)"></input>
+						</div>
+						<button class="btn btn-primary" ng-click="checkForeByCity()">Check</button>
+					</form>
+				</div>
+			</div>
+			<!-- Check weather forecast by lon & lat -->
+			<div class="panel panel-info" id="foreByLocPanel">
+				<div class="panel-heading">Weather Forecast</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<label>Longitude</label>
+							<input type="text" class="form-control" ng-model="foreLongitude" placeholder="Input longitude" required></input>
+						</div>
+						<div class="form-group">
+							<label>Latitude</label>
+							<input type="text" class="form-control" ng-model="foreLatitude" placeholder="Input latitude" required></input>
+						</div>
+						<button class="btn btn-primary" ng-click="checkForeByLoc()">Check</button>	
+					</form>
+				</div>
+				<label class="alert" id="alertForeByLoc">{{alertForeByLoc}}</label>
+			</div>
+		</div>
+
+		<div class="col-md-6 col-md-offset-1">
+		<!-- Current info checking by city name -->
+			<div class="panel panel-primary" id="curByCityPanelInfo">			
+				<div class="panel-heading">Weather Information</div>
+				<div class="panel-body tab-pan fade in active" id="now">
+					<div id="iconholderCity"></div>
+					<table class="table table-striped">
+						<tr>
+							<th>Location: </th>
+							<td>{{infoCurByCity.name}}</td>
+						</tr>
+						<tr>
+							<th>Weather main: </th>
+							<td>{{infoCurByCity.weather[0].main}}</td>
+						</tr>
+						<tr>
+							<th>Temp: </th>
+							<td>{{infoCurByCity.main.temp-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Pressure: </th>
+							<td>{{infoCurByCity.main.pressure}} hPa</td>
+						</tr>
+						<tr>
+							<th>Humidity: </th>
+							<td>{{infoCurByCity.main.humidity}} %</td>
+						</tr>
+						<tr>
+							<th>Wind speed: </th>
+							<td>{{infoCurByCity.wind.speed}} meter/sec</td>
+						</tr>
+					</table>
+				</div>				
+			</div>
+			<!-- Current info checking by lon & lat -->
+			<div class="panel panel-primary" id="curByLocPanelInfo">
+				<div class="panel-heading">Weather Information</div>
+				<div class="panel-body">
+					<div id="iconholderLoc"></div>
+					<table class="table table-striped">
+						<tr>
+							<th>Location: </th>
+							<td>{{infoCurByLoc.name}}</td>
+						</tr>
+						<tr>
+							<th>Weather main: </th>
+							<td>{{infoCurByLoc.weather[0].main}}</td>
+						</tr>
+						<tr>
+							<th>Temp: </th>
+							<td>{{infoCurByLoc.main.temp-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Pressure: </th>
+							<td>{{infoCurByLoc.main.pressure}} hPa</td>
+						</tr>
+						<tr>
+							<th>Humidity: </th>
+							<td>{{infoCurByLoc.main.humidity}} %</td>
+						</tr>
+						<tr>
+							<th>Wind speed: </th>
+							<td>{{infoCurByLoc.wind.speed}} meter/sec</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- Current info checking by zipcode -->
+			<div class="panel panel-primary" id="curByZipPanelInfo">
+				<div class="panel-heading">Weather Information</div>
+				<div class="panel-body">
+					<div id="iconholderZip"></div>
+					<table class="table table-striped">
+						<tr>
+							<th>Location: </th>
+							<td>{{infoCurByZip.name}}</td>
+						</tr>
+						<tr>
+							<th>Weather main: </th>
+							<td>{{infoCurByZip.weather[0].main}}</td>
+						</tr>
+						<tr>
+							<th>Temp: </th>
+							<td>{{infoCurByZip.main.temp-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Pressure: </th>
+							<td>{{infoCurByZip.main.pressure}} hPa</td>
+						</tr>
+						<tr>
+							<th>Humidity: </th>
+							<td>{{infoCurByZip.main.humidity}} %</td>
+						</tr>
+						<tr>
+							<th>Wind speed: </th>
+							<td>{{infoCurByZip.wind.speed}} meter/sec</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- Weather forecast info checking by city name -->
+			<div class="panel panel-primary" id="foreByCityPanelInfo">
+				<div class="panel-heading">Weather Information</div>
+				<ul class="nav nav-tabs">
+					<li class="active" id="tabTmrwByCity"><a data-toggle="tab" href="#" id="tmrwByCity">Tomorrow</a></li>
+					<li id="tabdayAftTmrwByCity"><a data-toggle="tab" href="#" id="dayAftTmrwByCity">Day after tomorrow</a></li>
+				</ul>
+				<div class="panel-body">
+					<div id="iconholderForeCity"></div>
+					<table class="table table-striped">
+						<tr>
+							<th>Country: </th>
+							<td>{{infoForeByCity.city.country}}</td>
+						</tr>
+						<tr>
+							<th>City: </th>
+							<td>{{infoForeByCity.city.name}}</td>
+						</tr>
+						<tr>
+							<th>Weather main</th>
+							<td>{{infoForeByCity.list[infoForeByCityListIndex].weather[0].main}}</td>
+						</tr>
+						<tr>
+							<th>Temp min: </th>
+							<td>{{infoForeByCity.list[infoForeByCityListIndex].temp.min-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Temp max: </th>
+							<td>{{infoForeByCity.list[infoForeByCityListIndex].temp.max-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Pressure: </th>
+							<td>{{infoForeByCity.list[infoForeByCityListIndex].pressure}} hPa</td>
+						</tr>
+						<tr>
+							<th>Humidity: </th>
+							<td>{{infoForeByCity.list[infoForeByCityListIndex].humidity}} %</td>
+						</tr>
+						<tr>
+							<th>Wind speed: </th>
+							<td>{{infoForeByCity.list[infoForeByCityListIndex].speed}} meter/sec</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- Weather forecast info checking by lon & lat -->
+			<div class="panel panel-primary" id="foreByLocPanelInfo">
+				<div class="panel-heading">Weather Information</div>
+				<ul class="nav nav-tabs">
+					<li class="active" id="tabTmrwByLoc"><a data-toggle="tab" href="#" id="tmrwByLoc">Tomorrow</a></li>
+					<li id="tabdayAftTmrwByLoc"><a data-toggle="tab" href="#" id="dayAftTmrwByLoc">Day after tomorrow</a></li>
+				</ul>
+				<div class="panel-body">
+					<div id="iconholderForeLoc"></div>
+					<table class="table table-striped">
+						<tr>
+							<th>Country: </th>
+							<td>{{infoForeByLoc.city.country}}</td>
+						</tr>
+						<tr>
+							<th>City: </th>
+							<td>{{infoForeByLoc.city.name}}</td>
+						</tr>
+						<tr>
+							<th>Weather main</th>
+							<td>{{infoForeByLoc.list[infoForeByLocListIndex].weather[0].main}}</td>
+						</tr>
+						<tr>
+							<th>Temp min: </th>
+							<td>{{infoForeByLoc.list[infoForeByLocListIndex].temp.min-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Temp max: </th>
+							<td>{{infoForeByLoc.list[infoForeByLocListIndex].temp.max-273.15}} °C</td>
+						</tr>
+						<tr>
+							<th>Pressure: </th>
+							<td>{{infoForeByLoc.list[infoForeByLocListIndex].pressure}} hPa</td>
+						</tr>
+						<tr>
+							<th>Humidity: </th>
+							<td>{{infoForeByLoc.list[infoForeByLocListIndex].humidity}} %</td>
+						</tr>
+						<tr>
+							<th>Wind speed: </th>
+							<td>{{infoForeByLoc.list[infoForeByLocListIndex].speed}} meter/sec</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+
+
+	</div>
+	
+</body>
+</html>
